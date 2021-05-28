@@ -33,8 +33,9 @@ class CodeGeneratorApplicationTests {
             //System.out.println("表名：" + ab[0]+"=====" + ab[1] + "====" + ab[2]);
 
             // 开始解析字段
-          List<Map<String,Object>>  fields = dataBaseUtils.getFieldListByTableName(ab[0]);
-          List<Map<String,Object>>  forginkeys = dataBaseUtils.getForeginKeyByTableName(ab[0]);
+          List<Map<String,Object>>  fields = dataBaseUtils.getFieldListByTableName(tableName);
+          List<Map<String,Object>>  forginkeys = dataBaseUtils.getForeginKeyByTableName(tableName);
+            System.out.println("================================================================================="+forginkeys);
             StringBuffer select = new StringBuffer("select ");
             StringBuffer where = new StringBuffer(" where 1 = 1 ");
             StringBuffer update = new StringBuffer("update ").append(tableName).append(" set ");
@@ -42,6 +43,10 @@ class CodeGeneratorApplicationTests {
             StringBuffer values = new StringBuffer("values(");
             StringBuffer delete = new StringBuffer("delete from ").append(tableName);
             StringBuffer leftjoin = new StringBuffer("select ");
+            StringBuffer _leftjoin = new StringBuffer();
+            for (Map<String, Object> forginkey : forginkeys) {
+                _leftjoin.append(" left join ").append(forginkey.get("REFERENCED_TABLE_NAME")).append(" ").append(getSzm(forginkey.get("REFERENCED_TABLE_NAME").toString())).append(" on ").append(getSzm(tableName)).append(".").append(forginkey.get("COLUMN_NAME")).append(" = ").append(getSzm(forginkey.get("REFERENCED_TABLE_NAME").toString())).append(".").append(forginkey.get("REFERENCED_COLUMN_NAME"));
+            }
             for (Map<String, Object> field : fields) {
                 String[] abs = jx(field.get("COLUMN_NAME").toString());
                 field.put("SDX_COLUMN_NAME",abs[1]);
@@ -51,7 +56,9 @@ class CodeGeneratorApplicationTests {
                 select.append(field.get("COLUMN_NAME").toString()).append(" as ").append(field.get("TFS_COLUMN_NAME").toString()).append(fields.get(fields.size() - 1).equals(field)?" ":",");
 
 
-                leftjoin.append(getSzm(field.get("COLUMN_NAME").toString())).append(".").append(field.get("COLUMN_NAME").toString()).append(fields.get(fields.size() - 1).equals(field)?" ":",");
+                leftjoin.append(getSzm(tableName)).append(".").append(field.get("COLUMN_NAME").toString()).append(fields.get(fields.size() - 1).equals(field)?" ":",");
+
+
 
                 if(field.get("COLUMN_KEY").equals("PRI")){
                     where.append(" and ").append(field.get("COLUMN_NAME").toString()).append(" = #{"+ field.get("TFS_COLUMN_NAME") +"}");
@@ -68,6 +75,7 @@ class CodeGeneratorApplicationTests {
 
             }
             select.append(" from " + tableName).append(where.toString());
+            leftjoin.append(" from " + tableName).append(" ").append(getSzm(tableName)).append(_leftjoin);
             update.append(where.toString());
             insert.append(values);
             delete.append(where);
@@ -76,6 +84,7 @@ class CodeGeneratorApplicationTests {
             System.out.println("修改：" + update);
             System.out.println("添加：" + insert);
             System.out.println("删除：" + delete);
+            System.out.println("左链接：" + leftjoin);
 
 
         }
@@ -111,7 +120,8 @@ class CodeGeneratorApplicationTests {
     }
 
     public String getSzm(String name){
-        return name.substring(0,1).toLowerCase(Locale.ROOT);
+        //return name.substring(0,1).toLowerCase(Locale.ROOT);
+        return name.toLowerCase(Locale.ROOT);
     }
 
 }
