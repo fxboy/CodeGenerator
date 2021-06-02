@@ -54,6 +54,19 @@
             <artifactId>dom4j</artifactId>
             <version>1.6.1</version>
         </dependency>
+        <!--
+            Java模板引擎
+        -->
+        <!-- https://mvnrepository.com/artifact/org.freemarker/com.springsource.freemarker -->
+        <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.31</version>
+        </dependency>
+
+
+
 
         <dependency>
             <groupId>mysql</groupId>

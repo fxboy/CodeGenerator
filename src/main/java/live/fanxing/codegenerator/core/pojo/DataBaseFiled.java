@@ -1,5 +1,6 @@
 package live.fanxing.codegenerator.core.pojo;
 
+
 import lombok.Data;
 
 /**

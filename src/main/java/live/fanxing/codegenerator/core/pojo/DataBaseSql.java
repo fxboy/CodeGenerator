@@ -16,13 +16,13 @@ import lombok.ToString;
 public class DataBaseSql {
     SqlType type;
     String methodName;
-    String returnName;
+    String returnType;
     String sql;
 
-    public DataBaseSql(SqlType type, String methodName, String sql,String returnName) {
+    public DataBaseSql(SqlType type, String methodName, String sql,String returnType) {
         this.type = type;
         this.methodName = methodName;
         this.sql = sql;
-        this.returnName = returnName;
+        this.returnType = returnType;
     }
 }
