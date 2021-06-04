@@ -245,6 +245,7 @@ public class CreateCode {
     public void build() {
         this.create();
         this.CreateMapperResult();
+        // 暂时注释掉了问题，需要回复
        // this.dataBaseInfo.setDataBaseTables(this.dataBaseTables);
        // this.createFiles();
     }
