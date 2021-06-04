@@ -28,14 +28,17 @@ public class DataBaseTable {
     //用来保存sql语句的方法
     List<DataBaseSql> dataBaseSqls;
 
+    MapperInfo mapperInfo;
+
     TableEntity tableEntities;
 
-    public void build(String tableName, String className, String attributeName, List<DataBaseFiled> dataBaseFileds, List<DataBaseSql> dataBaseSqls,TableEntity tableEntities) {
+    public void build(String tableName, String className, String attributeName, List<DataBaseFiled> dataBaseFileds, List<DataBaseSql> dataBaseSqls,TableEntity tableEntities,MapperInfo mapperInfo) {
         this.tableName = tableName;
         this.className = className;
         this.attributeName = attributeName;
         this.dataBaseFileds = dataBaseFileds;
         this.dataBaseSqls = dataBaseSqls;
         this.tableEntities = tableEntities;
+        this.mapperInfo = mapperInfo;
     }
 }

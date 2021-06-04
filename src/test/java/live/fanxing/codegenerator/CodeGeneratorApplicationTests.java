@@ -26,6 +26,7 @@ class CodeGeneratorApplicationTests {
 
        // List<Map<String,Object>> maps = new ArrayList<>();
         createApplication.create("com.example.demo","B:\\new",null).run();
+        System.out.println(JSONObject.toJSONString(createApplication.getDataBaseInfo()));
        // createCode.init("com.example.demo","B:\\new\\",null,dataBaseInfo).build();
 
 //        System.out.println(JSONObject.toJSONString(dataBaseInfo));
