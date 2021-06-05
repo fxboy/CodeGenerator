@@ -2,6 +2,7 @@ package live.fanxing.codegenerator.file;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import live.fanxing.codegenerator.core.OSinfo;
 import live.fanxing.codegenerator.core.pojo.TableEntity;
 import live.fanxing.codegenerator.util.ToolsUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 /**
  * @auther Fanxing
- * 这是一个简介
+ * 实体类java文件生成
  */
 @Component("entity")
 public class EntityFileCreate implements FileCreate{
@@ -22,12 +23,16 @@ public class EntityFileCreate implements FileCreate{
     @Value("${cr.model.entity}")
     String modelName;
 
+
+
     @Override
     public void outFiles(String outPath,String modelPath,TableEntity tableEntity) {
-        System.out.println(outPath);
-        System.out.println(modelPath);
-        outPath = outPath +"\\src\\main\\" +"\\java\\" + tableEntity.getPackageName().replace(".","\\") + "\\" +  packageName;
-        ToolsUtils.createFile(outPath,modelPath,modelName+".ftl",tableEntity.getTableName(),tableEntity);
+        try {
+            outPath = outPath +"src\\main\\" +"java\\" + tableEntity.getPackageName().replace(".","\\")  + "\\" +  packageName+"\\";
+            ToolsUtils.createFile(outPath + "\\",modelPath,modelName+".ftl",tableEntity.getTableName(),tableEntity);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
 }
 // /Users/fanxing/code/src/main/java/com/example/demo

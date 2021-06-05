@@ -2,6 +2,7 @@ package live.fanxing.codegenerator.util;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import live.fanxing.codegenerator.core.OSinfo;
 
 import java.io.*;
 import java.util.HashMap;
@@ -73,24 +74,20 @@ public class ToolsUtils {
 
 
 
-    public static void createFile(String outPath,String modelPath,String modelName,String className,Object obj){
+    public static void createFile(String outPath,String modelPath,String modelName,String className,Object obj) throws Exception {
         Configuration configuration = new Configuration();
         Writer out = null;
         try {
-            // step2 获取模版路径
             configuration.setDirectoryForTemplateLoading(new File(modelPath));
-            // step3 创建数据模型
-            // step4 加载模版文件
             Template template = configuration.getTemplate(modelName);
-            // step5 生成数据
-            File docFile = new File(outPath.replace("\\","/") + "/"+ className + ".java");
+            File docFile = new File((!OSinfo.isWindows() ?outPath.replace("\\","/") + "/":outPath +"\\") + className + ".java");
             out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(docFile)));
-            // step6 输出文件
             Map<String, Object> map = new HashMap<>();
             map.put("tableEntities",obj);
             template.process(map, out);
+            System.out.println("文件生成完成:"+ docFile.getName() +",位置：" + docFile.getPath() );
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception("检测到为windows系统，将切换目录书写格式");
         } finally {
             try {
                 if (null != out) {
