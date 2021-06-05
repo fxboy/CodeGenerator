@@ -149,7 +149,8 @@ public class CreateCode {
         List<Map<String, String>> attrs = new ArrayList<>();
 
         // 开始构建当前表的实体类 属性名-属性类型
-
+       // dataBaseTable.setMapperInfo();
+        MapperInfo mapperInfo = tableMapperInfos.get(ab[1]);
         StringBuffer select = new StringBuffer("select ");
         StringBuffer where = new StringBuffer(" where 1 = 1 ");
         StringBuffer update = new StringBuffer("update ").append(tableName).append(" set ");
@@ -158,9 +159,18 @@ public class CreateCode {
         StringBuffer delete = new StringBuffer("delete from ").append(tableName);
         StringBuffer leftjoin = new StringBuffer("select ");
         StringBuffer _leftjoin = new StringBuffer();
+
+        List<MapperInfo> collec = new ArrayList<>();
+        List<MapperInfo> assoc = new ArrayList<>();
         for (Map<String, Object> forginkey : forginkeys) {
             _leftjoin.append(" left join ").append(forginkey.get("REFERENCED_TABLE_NAME")).append(" ").append(ToolsUtils.getSzm(forginkey.get("REFERENCED_TABLE_NAME").toString())).append(" on ").append(ToolsUtils.getSzm(tableName)).append(".").append(forginkey.get("COLUMN_NAME")).append(" = ").append(ToolsUtils.getSzm(forginkey.get("REFERENCED_TABLE_NAME").toString())).append(".").append(forginkey.get("REFERENCED_COLUMN_NAME"));
+            // 有外键，则拿result
+            String tn = ToolsUtils.toUper(forginkey.get("REFERENCED_TABLE_NAME").toString());
+            collec.add(this.tableMapperInfos.get(tn));
+            assoc.add(this.tableMapperInfos.get(tn));
         }
+       mapperInfo.setAssociation(assoc);
+        mapperInfo.setCollection(collec);
 
         for (Map<String, Object> field : fields) {
             String[] abs = ToolsUtils.jx(field.get("COLUMN_NAME").toString());
@@ -216,7 +226,7 @@ public class CreateCode {
         // 生成删除语句 by所有字段 根据and 根据or
         //根据规则生成
 
-       // dataBaseTable.build(ab[0], ab[1], ab[2], dataBaseFileds, dataBaseSqls, tableEntity);
+        dataBaseTable.build(ab[0], ab[1], ab[2], dataBaseFileds, dataBaseSqls, tableEntity,mapperInfo);
         this.dataBaseTables.add(dataBaseTable);
         this.index++;
         return create();
@@ -243,11 +253,11 @@ public class CreateCode {
 
     // 最终创建
     public void build() {
-        this.create();
+
         this.CreateMapperResult();
-        // 暂时注释掉了问题，需要回复
-       // this.dataBaseInfo.setDataBaseTables(this.dataBaseTables);
-       // this.createFiles();
+        this.create();
+        this.dataBaseInfo.setDataBaseTables(this.dataBaseTables);
+        this.createFiles();
     }
 
 }

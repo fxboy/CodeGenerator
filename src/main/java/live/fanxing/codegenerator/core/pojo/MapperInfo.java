@@ -15,8 +15,8 @@ public class MapperInfo {
     String nameSpace;
     String resultType;
     List<MapperResult> resultList;
-    List<MapperResult> association;
-    List<MapperResult> collection;
+    List<MapperInfo> association;
+    List<MapperInfo> collection;
 }
 
 
