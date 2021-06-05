@@ -50,7 +50,7 @@ public class CreateCode {
     List<TableEntity> tableEntities;
 
 
-   Map<String,MapperInfo> tableMapperInfos = new HashMap<>();
+    Map<String,MapperInfo> tableMapperInfos = new HashMap<>();
     // 创建全部的Result
     Map<String,MapperResult>  mapperResults = new HashMap<>();
 
@@ -91,7 +91,7 @@ public class CreateCode {
     private void CreateMapperResult(){
         // 遍历所有表
         for (String tableName: tableNames
-             ) {
+        ) {
             // 获得三方解析
             String[] ab = ToolsUtils.jx(tableName);
             // 创建 mapperinfo
@@ -103,7 +103,7 @@ public class CreateCode {
             List<MapperResult> mapperResults = new ArrayList<>();
             this.tableMapperInfos.put(ab[1],mapperInfo);
             for (Map<String,Object> map:
-                 fields) {
+                    fields) {
                 MapperResult mapperResult = new MapperResult();
                 String abs[] = ToolsUtils.jx(map.get("COLUMN_NAME").toString());
                 mapperResult.setColumn(abs[0]);
@@ -149,7 +149,7 @@ public class CreateCode {
         List<Map<String, String>> attrs = new ArrayList<>();
 
         // 开始构建当前表的实体类 属性名-属性类型
-       // dataBaseTable.setMapperInfo();
+        // dataBaseTable.setMapperInfo();
         MapperInfo mapperInfo = tableMapperInfos.get(ab[1]);
         StringBuffer select = new StringBuffer("select ");
         StringBuffer where = new StringBuffer(" where 1 = 1 ");
@@ -169,7 +169,7 @@ public class CreateCode {
             collec.add(this.tableMapperInfos.get(tn));
             assoc.add(this.tableMapperInfos.get(tn));
         }
-       mapperInfo.setAssociation(assoc);
+        mapperInfo.setAssociation(assoc);
         mapperInfo.setCollection(collec);
 
         for (Map<String, Object> field : fields) {
@@ -243,7 +243,7 @@ public class CreateCode {
 
     private void createFiles() {
         for (DataBaseTable dataBaseTable:
-        this.dataBaseInfo.getDataBaseTables()) {
+                this.dataBaseInfo.getDataBaseTables()) {
             EntityfileCreate.outFiles(outPath,modelPath,dataBaseTable.getTableEntities());
         }
 

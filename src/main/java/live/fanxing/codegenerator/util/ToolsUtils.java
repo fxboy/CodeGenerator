@@ -83,7 +83,7 @@ public class ToolsUtils {
             // step4 加载模版文件
             Template template = configuration.getTemplate(modelName);
             // step5 生成数据
-            File docFile = new File(outPath + "\\"+ className + ".java");
+            File docFile = new File(outPath.replace("\\","/") + "/"+ className + ".java");
             out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(docFile)));
             // step6 输出文件
             Map<String, Object> map = new HashMap<>();

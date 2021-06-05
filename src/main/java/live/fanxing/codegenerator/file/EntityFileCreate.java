@@ -26,7 +26,8 @@ public class EntityFileCreate implements FileCreate{
     public void outFiles(String outPath,String modelPath,TableEntity tableEntity) {
         System.out.println(outPath);
         System.out.println(modelPath);
-        outPath = outPath +"\\java\\" + tableEntity.getPackageName().replace(".","\\") + "\\" +  packageName;
+        outPath = outPath +"\\src\\main\\" +"\\java\\" + tableEntity.getPackageName().replace(".","\\") + "\\" +  packageName;
         ToolsUtils.createFile(outPath,modelPath,modelName+".ftl",tableEntity.getTableName(),tableEntity);
     }
 }
+// /Users/fanxing/code/src/main/java/com/example/demo
