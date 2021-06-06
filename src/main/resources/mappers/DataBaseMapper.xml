@@ -14,7 +14,8 @@
         WHERE t.TABLE_SCHEMA = (select database()) AND t.TABLE_NAME = upper(#{tableName})
     </select>
     <select id="getForeginKeyByTableName" resultType="java.util.Map">
-        SELECT * FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE  WHERE constraint_schema =  (select database())  AND table_name = #{tableName} AND constraint_name != 'PRIMARY' AND REFERENCED_TABLE_NAME IS NOT NULL
+       <!-- SELECT * FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE  WHERE constraint_schema =  (select database())  AND table_name = #{tableName} AND constraint_name != 'PRIMARY' AND REFERENCED_TABLE_NAME IS NOT NULL-->
+        SELECT * FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE  WHERE constraint_schema =  (select database())  AND constraint_name != 'PRIMARY'  and REFERENCED_TABLE_NAME = #{tableName}
     </select>
 
 

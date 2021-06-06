@@ -203,7 +203,7 @@ public class CreateCode {
         DataBaseSql var1 = new DataBaseSql(SqlType.SELECT_BY_ID, "selectById", select.toString(), "List<" + ab[1] + ">");
         dataBaseSqls.add(var1);
 
-        tableEntity.setAttributes(attrs);
+        //tableEntity.setAttributes(attrs);
         tableEntity.setTableName(ab[1]);
         tableEntity.setPackageName(packageName);
 

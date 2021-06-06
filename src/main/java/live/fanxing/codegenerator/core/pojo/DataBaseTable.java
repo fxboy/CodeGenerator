@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @auther Fanxing
- * 这是一个简介
+ * 表信息 第二层
  */
 
 @Getter
@@ -25,6 +25,9 @@ public class DataBaseTable {
     String attributeName;
     //所有的字段名
     List<DataBaseFiled> dataBaseFileds;
+
+
+
     //用来保存sql语句的方法
     List<DataBaseSql> dataBaseSqls;
 

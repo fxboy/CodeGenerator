@@ -2,6 +2,7 @@ package live.fanxing.codegenerator;
 
 import com.alibaba.fastjson.JSONObject;
 import live.fanxing.codegenerator.core.CreateCode;
+import live.fanxing.codegenerator.core.Generator;
 import live.fanxing.codegenerator.core.pojo.DataBaseInfo;
 import live.fanxing.codegenerator.core.pojo.DataBaseTable;
 import live.fanxing.codegenerator.core.pojo.TableEntity;
@@ -21,24 +22,16 @@ class CodeGeneratorApplicationTests {
     @Autowired
     CreateApplication createApplication;
 
+    @Autowired
+    Generator generator;
+
     @Test
     void contextLoads() throws Exception {
 
-       // List<Map<String,Object>> maps = new ArrayList<>();
-        createApplication.create("com.example.demo","B:\\new",null).run();
-        System.out.println(JSONObject.toJSONString(createApplication.getDataBaseInfo()));
-       // createCode.init("com.example.demo","B:\\new\\",null,dataBaseInfo).build();
-
-//        System.out.println(JSONObject.toJSONString(dataBaseInfo));
-//        for (DataBaseTable dataBaseTable : dataBaseInfo.getDataBaseTables()) {
-//            System.out.println("======================================");
-//            System.out.println(dataBaseTable.getTableEntities().getAttributes());
-//            System.out.println(dataBaseTable.getTableEntities().getTableName());
-//        }
-
-//        new Thread(()->{
-//
-//        }).run();
+        System.out.println("=========开始生成文件========");
+        generator.init("com.example.demo","/Users/fanxing/code/","/Users/fanxing/IdeaProjects/CodeGenerator/src/main/resources/ftl").build();
+       // createApplication.create("com.example.demo","/Users/fanxing/code/","/Users/fanxing/IdeaProjects/CodeGenerator/src/main/resources/ftl").run();
+       // System.out.println(JSONObject.toJSONString(createApplication.getDataBaseInfo()));
     }
 
 

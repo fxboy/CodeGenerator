@@ -23,8 +23,6 @@ public class EntityFileCreate implements FileCreate{
     @Value("${cr.model.entity}")
     String modelName;
 
-
-
     @Override
     public void outFiles(String outPath,String modelPath,TableEntity tableEntity) {
         try {
@@ -35,4 +33,3 @@ public class EntityFileCreate implements FileCreate{
         }
     }
 }
-// /Users/fanxing/code/src/main/java/com/example/demo

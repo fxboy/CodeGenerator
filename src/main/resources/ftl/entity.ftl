@@ -12,7 +12,6 @@ public class ${tableEntities.tableName} implements Serializable {
     <#list map?keys as key>
         @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
         private ${map[key]} ${key};
-
     </#list>
 </#list>
 
