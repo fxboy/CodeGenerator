@@ -19,19 +19,18 @@ public class Filed {
     String filedName;
     // 属性名
     String attrName;
+    // 数据库中类型
+    String filedType;
+    // 转换成java中的类型
+    String javaType;
 
 
-
-
-
-
-
-    public Filed(boolean isPrimarykey, boolean isAutoIncrement, String filedName, String attrName) {
+    public Filed(boolean isPrimarykey, boolean isAutoIncrement, String filedName, String attrName, String filedType, String javaType) {
         this.isPrimarykey = isPrimarykey;
         this.isAutoIncrement = isAutoIncrement;
         this.filedName = filedName;
         this.attrName = attrName;
+        this.filedType = filedType;
+        this.javaType = javaType;
     }
-
-
 }

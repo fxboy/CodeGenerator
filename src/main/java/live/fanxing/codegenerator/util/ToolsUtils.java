@@ -3,6 +3,7 @@ package live.fanxing.codegenerator.util;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import live.fanxing.codegenerator.core.OSinfo;
+import live.fanxing.codegenerator.core.code.Entity;
 
 import java.io.*;
 import java.util.HashMap;
@@ -74,6 +75,7 @@ public class ToolsUtils {
 
 
 
+
     public static void createFile(String outPath,String modelPath,String modelName,String className,Object obj) throws Exception {
         Configuration configuration = new Configuration();
         Writer out = null;
@@ -87,6 +89,35 @@ public class ToolsUtils {
             template.process(map, out);
             System.out.println("文件生成完成:"+ docFile.getName() +",位置：" + docFile.getPath() );
         } catch (Exception e) {
+            throw new Exception("检测到为windows系统，将切换目录书写格式");
+        } finally {
+            try {
+                if (null != out) {
+                    out.flush();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+
+
+    public static <T> void nCreateFile(String outPath, String modelPath, String modelName, T obj) throws Exception {
+        Configuration configuration = new Configuration();
+        Writer out = null;
+        try {
+            configuration.setDirectoryForTemplateLoading(new File(modelPath));
+            Template template = configuration.getTemplate(modelName);
+            File docFile = new File(outPath);
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(docFile)));
+            Map<String,T> map = new HashMap<>();
+            map.put("entity",obj);
+            template.process(map, out);
+            System.out.println("文件生成完成:"+ docFile.getName() +",位置：" + docFile.getPath() );
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("检测到输出路径：" + outPath);
+            System.out.println("检测模板路径：" + modelPath + modelName);
             throw new Exception("检测到为windows系统，将切换目录书写格式");
         } finally {
             try {

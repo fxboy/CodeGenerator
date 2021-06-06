@@ -3,10 +3,14 @@ package live.fanxing.codegenerator.core;
 import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import live.fanxing.codegenerator.core.code.CodeInfo;
+import live.fanxing.codegenerator.core.code.Dao;
+import live.fanxing.codegenerator.core.code.Entity;
 import live.fanxing.codegenerator.core.gen.DataBase;
 import live.fanxing.codegenerator.core.gen.Filed;
 import live.fanxing.codegenerator.core.gen.Keyon;
 import live.fanxing.codegenerator.core.gen.Table;
+import live.fanxing.codegenerator.core.pojo.Attributes;
 import live.fanxing.codegenerator.core.pojo.DataBaseInfo;
 import live.fanxing.codegenerator.file.FileCreate;
 import live.fanxing.codegenerator.util.DataBaseUtils;
@@ -36,7 +40,17 @@ public class Generator {
     String packageDaoName;
 
     @Value("${cr.package.entity}")
-    String packagEntityeName;
+    String packagEntityName;
+
+    @Value("${cr.model.entity}")
+    String modelEntityName;
+
+    @Value("${cr.model.dao}")
+    String modelDaoName;
+
+
+
+    //============================
 
     @Autowired
     DataBaseUtils dataBaseUtils;
@@ -48,6 +62,7 @@ public class Generator {
     DataBaseInfo dataBaseInfo = new DataBaseInfo();
 
     DataBase dataBase = new DataBase();
+    CodeInfo codeInfo = new CodeInfo();
     //获取的表名集合
     List<String> tableNames;
 
@@ -78,11 +93,21 @@ public class Generator {
     }
 
 
-    private void createSql(String tableName){};
 
-    private void createEntity(){};
+    // 开始生成实体类
+    private void createEntity(Entity entity) throws Exception {
+        ToolsUtils.nCreateFile(entity.getOutPath(),this.modelPath,entity.getModelPath(),entity);
+    };
 
-    private void createDao(){};
+    public List<Attributes> setAttrByEntity(){
+        return null;
+    }
+
+    // 开始生成Dao层
+    private void createDao(Dao dao) throws Exception {
+        ToolsUtils.nCreateFile(dao.getOutPath(),this.modelPath,dao.getModelPath(),dao);
+    };
+
 
     private void createController(){};
 
@@ -99,6 +124,7 @@ public class Generator {
         if(index >= this.tableNames.size()){
             // 开始下一步操作
             this.run(0);
+
             return index;
         }
         String[] name = ToolsUtils.jx(tableNames.get(index));
@@ -115,12 +141,19 @@ public class Generator {
         if(index >= this.dataBase.getTables().size()){
             // 结束后将修改后的内容重新覆盖以前的
             this.dataBase.setTables(tables);
+
             return index;
         }
         String name = this.dataBase.getTables().get(index).getTableName();
         // 获取当前表中的字段
         this.fields = dataBaseUtils.getFieldListByTableName(name);
         this.forginkeys = dataBaseUtils.getForeginKeyByTableName(name);
+        // 创建 实体类信息
+        Entity entity = new Entity(dataBase.getPackageName() + "." + packagEntityName,this.dataBase.getTables().get(index).getClassName(),this.outPath,this.modelEntityName +".ftl");
+        Dao dao = new Dao(dataBase.getPackageName() + "." + this.packageDaoName,this.dataBase.getTables().get(index).getClassName(),this.outPath,this.modelDaoName +".ftl",dataBase.getPackageName() + "." + packagEntityName);
+        this.dataBase.getTables().get(index).setEntity(entity);
+        this.dataBase.getTables().get(index).setDao(dao);
+
         // 遍历当前表中的字段
         Table table = forFields(0,this.dataBase.getTables().get(index));
         tables.add(table);
@@ -130,20 +163,26 @@ public class Generator {
 
 
 
-
-
     /**
      * 遍历字段
      * */
     private Table forFields(int index, Table table){
+//        Entity entity = new Entity();
+//        entity.setPackageName(dataBase.getPackageName()+"." + packagEntityeName);
+//        // 属性赋值
+//        List<Attributes> attributesList = this.setAttrByEntity();
+//        entity.setAttributesList(attributesList);
         if(index >= this.fields.size()){
             return forForginkeys(0,table);
         }
         Map map = this.fields.get(index);
         String[] name = ToolsUtils.jx(map.get("COLUMN_NAME").toString());
         // 创建filed
-        Filed filed = new Filed(map.get("COLUMN_KEY").equals("PRI"),map.get("EXTRA").toString().contains("auto_increment"),name[0],name[2]);
+
+        Filed filed = new Filed(map.get("COLUMN_KEY").equals("PRI"),map.get("EXTRA").toString().contains("auto_increment"),name[0],name[2],map.get("DATA_TYPE").toString(),ToolsUtils.sqlTypeToJavaType(map.get("DATA_TYPE").toString()));
         table.addFiled(name[0],filed);
+        Attributes attributes = new Attributes(name[2],ToolsUtils.sqlTypeToJavaType(map.get("DATA_TYPE").toString()));
+        table.getEntity().addAttr(attributes);
         index++;
         return forFields(index,table);
     }
@@ -157,14 +196,37 @@ public class Generator {
         String[] name = ToolsUtils.jx(map.get("TABLE_NAME").toString());
         Keyon keyon = new Keyon(map.get("TABLE_NAME").toString() +"." + map.get("COLUMN_NAME").toString(),map.get("REFERENCED_TABLE_NAME").toString() + "." +  map.get("REFERENCED_COLUMN_NAME").toString());
         table.addLeft(name[0],keyon,dataBase.getTableMap().get(name[0]));
+        Attributes attributes = new Attributes(name[2],"List<"+name[1]+">");
+        table.getEntity().addAttr(attributes);
         index++;
         return forForginkeys(index,table);
     }
 
 
+    // 遍历循环生成文件啦
+    public int go(int index){
+        if(index >= this.dataBase.getTables().size()){
+            return index;
+        }
+        try{
+            createEntity(this.dataBase.getTables().get(index).getEntity());
+            createDao(this.dataBase.getTables().get(index).getDao());
+            //index++;
+            return go(++index);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return 0;
+        }
+
+
+    }
+
+
     public void build(){
         this.generator(0);
+        this.go(0);
         System.out.println(JSON.toJSONString(this.dataBase, SerializerFeature.DisableCircularReferenceDetect));
+        System.out.println(JSON.toJSONString(this.codeInfo, SerializerFeature.DisableCircularReferenceDetect));
     }
 
 

@@ -1,5 +1,7 @@
 package live.fanxing.codegenerator.core.gen;
 
+import live.fanxing.codegenerator.core.code.Dao;
+import live.fanxing.codegenerator.core.code.Entity;
 import lombok.Data;
 import sun.tools.jconsole.Tab;
 
@@ -31,6 +33,12 @@ public class Table {
 
     // 关联查询的时候的on
     List<Keyon> keyOns;
+
+    // 当前表关联的实体类
+    Entity entity;
+
+    // 关联的Dao类
+    Dao dao;
 
 
     public Table(String tableName, String className, String attrName) {

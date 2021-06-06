@@ -21,8 +21,13 @@ import java.util.Map;
 @Mapper
 public interface DataBaseUtils {
     // 根据数据库来获取表
+
     List<String> getTableListByNowDataBase();
     // 根据表来获取字段
+    /**
+     * @param
+     * @return
+     * */
     List<Map<String,Object>> getFieldListByTableName(@Param("tableName") String tableName);
     // 获取表与表之间的关系
     List<Map<String,Object>> getForeginKeyByTableName(@Param("tableName") String tableName);
