@@ -196,8 +196,11 @@ public class Generator {
         String[] name = ToolsUtils.jx(map.get("TABLE_NAME").toString());
         Keyon keyon = new Keyon(map.get("TABLE_NAME").toString() +"." + map.get("COLUMN_NAME").toString(),map.get("REFERENCED_TABLE_NAME").toString() + "." +  map.get("REFERENCED_COLUMN_NAME").toString());
         table.addLeft(name[0],keyon,dataBase.getTableMap().get(name[0]));
-        Attributes attributes = new Attributes(name[2],"List<"+name[1]+">");
+        Attributes attributes = new Attributes(name[2]+"Lists","List<"+name[1]+">");
+        Attributes attributes1 = new Attributes(this.dataBase.getTableMap().get(name[0]).getFiledMap().get(ToolsUtils.jx(map.get("COLUMN_NAME").toString())[0]).getAttrName(),
+                this.dataBase.getTableMap().get(name[0]).getFiledMap().get(ToolsUtils.jx(map.get("COLUMN_NAME").toString())[0]).getFiledType());
         table.getEntity().addAttr(attributes);
+        table.getEntity().addAttr(attributes1);
         index++;
         return forForginkeys(index,table);
     }

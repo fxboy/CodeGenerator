@@ -4,64 +4,64 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import ${entity.entityPackageName}.${entity.entityName};
-
+import ${entity.daoPackageName}.${entity.daoName};
+import ${entity.resultPackageName}.${entity.resultName};
 import java.util.List;
 
 /**
 * @auther
-* ${entity.className} Dao层
+* ${entity.className} Service
 */
-@Repository
-@Mapper
-public interface ${entity.className}Dao {
+@Service
+public interface ${entity.className}Service {
     /**
     * 根据id查询
     * @param ${entity.entityNameXtf} ${entity.entityName}实体类
-    * @return ${entity.entityName}
+    * @return ${entity.resultName}
     **/
-    ${entity.entityName} selectById(${entity.entityName} ${entity.entityNameXtf});
+    ${entity.resultName} selectById(${entity.entityName} ${entity.entityNameXtf});
 
     /**
     * 根据条件查询
     * @param ${entity.entityNameXtf} ${entity.entityName}实体类
-    * @return ${entity.entityName}
+    * @return ${entity.resultName}
     **/
-    ${entity.entityName} queryOne(${entity.entityName} ${entity.entityNameXtf});
+    ${entity.resultName} queryOne(${entity.entityName} ${entity.entityNameXtf});
 
     /**
     * 查询全部的条数
     * @param ${entity.entityNameXtf} ${entity.entityName}实体类
-    * @return List<${entity.entityName}>
+    * @return ${entity.resultName}
     **/
-    List<${entity.entityName} > queryAll(${entity.entityName} ${entity.entityNameXtf});
+    ${entity.resultName} queryAll(${entity.entityName} ${entity.entityNameXtf});
 
     /**
     * 查询全部的条数 模糊查询
     * @param ${entity.entityNameXtf} ${entity.entityName}实体类
-    * @return List<${entity.entityName}>
+    * @return ${entity.resultName}
     **/
-    List<${entity.entityName} > queryAllByLike(${entity.entityName} ${entity.entityNameXtf});
+    ${entity.resultName} queryAllByLike(${entity.entityName} ${entity.entityNameXtf});
 
     /**
     * 添加
     * @param ${entity.entityNameXtf} ${entity.entityName}实体类
-    * @return 添加成功的条数
+    * @return ${entity.resultName}
     **/
-    Integer save(${entity.entityName} ${entity.entityNameXtf});
+    ${entity.resultName} save(${entity.entityName} ${entity.entityNameXtf});
 
     /**
     * 修改成功的条数
     * @param ${entity.entityNameXtf} ${entity.entityName}实体类
-    * @return List<${entity.entityName}>
+    * @return ${entity.resultName}
     **/
-    Integer update(${entity.entityName} ${entity.entityNameXtf});
+    ${entity.resultName} update(${entity.entityName} ${entity.entityNameXtf});
 
     /**
     * 删除成功的条数
     * @param ${entity.entityNameXtf} ${entity.entityName}实体类
-    * @return List<${entity.entityName}>
+    * @return ${entity.resultName}
     **/
-    Integer delete(${entity.entityName} ${entity.entityNameXtf});
+    ${entity.resultName} delete(${entity.entityName} ${entity.entityNameXtf});
 
 
 }
