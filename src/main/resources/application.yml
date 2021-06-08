@@ -1,0 +1,84 @@
+# config
+server:
+  port: 8888
+
+# spring config
+spring:
+  application:
+    name: fc
+  jackson:
+    date-format: yyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  banner:
+    charset: UTF-8
+    location: classpath:config/banner.txt
+  servlet:
+    multipart:
+      location: /opt/upload/tmp
+      max-file-size: 1MB
+      max-request-size: 100MB
+  thymeleaf:
+    enabled: true
+    cache: true
+    encoding: UTF-8
+    check-template: true
+    check-template-location: true
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    servlet:
+      content-type: text/html
+
+
+# mybatis
+mybatis:
+  type-aliases-package: live.fanxing.codegenerator.mybatis.entity
+  mapper-locations: classpath*:mappers/*Mapper.xml
+
+
+# 数据源配置
+---
+spring:
+  datasource:
+    name: defaultDataSource
+    driver-class-name: ${cr.database.driver}
+    url: jdbc:${cr.database.type}://${cr.database.host}:${cr.database.port}/${cr.database.name}?serverTimezone=UTC
+    username: ${cr.database.username}
+    password: ${cr.database.password}
+    type: com.zaxxer.hikari.HikariDataSource
+    cachePrepStmts: true
+    prepStmtCacheSize: 300
+    prepStmtCacheSqlLimit: 2048
+    useServerPrepStmts: true
+    useLocalSessionState: true
+    rewriteBatchedStatements: true
+    cacheResultSetMetadata: true
+    cacheServerConfiguration: true
+    elideSetAutoCommits: true
+    maintainTimeStats: false
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 20
+      idle-timeout: 10000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+
+# fc 生成路径配置
+cr:
+  model:
+    controller: controller
+    dao: dao
+    entity: entity
+    mapper: mapper
+    service: service
+  package:
+    controller: controller
+    dao: dao
+    entity: entity
+    mapper: mapper
+    service: service
+  path:
+    packName: com.example.demo
+    outPath: /Users/fanxing/code/
+    modelPath:
