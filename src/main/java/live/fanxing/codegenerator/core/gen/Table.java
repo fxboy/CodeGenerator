@@ -3,7 +3,7 @@ package live.fanxing.codegenerator.core.gen;
 import live.fanxing.codegenerator.core.code.Dao;
 import live.fanxing.codegenerator.core.code.Entity;
 import lombok.Data;
-import sun.tools.jconsole.Tab;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;

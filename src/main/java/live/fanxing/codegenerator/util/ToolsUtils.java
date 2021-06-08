@@ -108,12 +108,24 @@ public class ToolsUtils {
         try {
             configuration.setDirectoryForTemplateLoading(new File(modelPath));
             Template template = configuration.getTemplate(modelName);
-            File docFile = new File(outPath);
-            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(docFile)));
+            String filePaht = "";
+            int lastIndexOf = outPath.lastIndexOf(File.separator);
+            filePaht = outPath.substring(0,lastIndexOf);
+            File docFile = new File(filePaht);
+            if(!docFile.exists()){
+                docFile.mkdirs(); //创建目录
+            }
+            File classFile = new File(outPath);
+            if (!classFile.exists()) {
+                classFile.createNewFile();//有路径才能创建文件
+            }
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(classFile)));
             Map<String,T> map = new HashMap<>();
             map.put("entity",obj);
+            map.put("service",obj);
             template.process(map, out);
-            System.out.println("文件生成完成:"+ docFile.getName() +",位置：" + docFile.getPath() );
+            System.out.println(outPath);
+            System.out.println("文件生成完成:"+ classFile.getName() +",位置：" + classFile.getPath() );
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("检测到输出路径：" + outPath);
@@ -128,6 +140,23 @@ public class ToolsUtils {
                 e2.printStackTrace();
             }
         }
+    }
+
+    public static boolean existFile(String outPath) throws Exception {
+        if(outPath==null){
+            throw new Exception("文件路径未填写，请确保参数完整！");
+        }
+        File file = new File(outPath);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+                return true;
+            }catch (Exception e){
+                throw new Exception("文件创建失败！");
+
+            }
+        }
+        return true;
     }
 
 }
