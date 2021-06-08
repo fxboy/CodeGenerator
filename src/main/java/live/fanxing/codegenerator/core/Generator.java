@@ -119,7 +119,10 @@ public class Generator {
     // 当前表中的外键关系
     List<Map<String, Object>> forginkeys;
 
-
+    /**
+     * 1.递归所有表数据
+     * 2.初始化Table存入dataBase
+     */
     private int generator(int index){
         if(index >= this.tableNames.size()){
             // 开始下一步操作
@@ -181,6 +184,8 @@ public class Generator {
 
         Filed filed = new Filed(map.get("COLUMN_KEY").equals("PRI"),map.get("EXTRA").toString().contains("auto_increment"),name[0],name[2],map.get("DATA_TYPE").toString(),ToolsUtils.sqlTypeToJavaType(map.get("DATA_TYPE").toString()));
         table.addFiled(name[0],filed);
+        this.dataBase.getTables().get(index).setFileds(table.getFileds());
+        this.dataBase.getTables().get(index).setFiledMap(table.getFiledMap());
         Attributes attributes = new Attributes(name[2],ToolsUtils.sqlTypeToJavaType(map.get("DATA_TYPE").toString()));
         table.getEntity().addAttr(attributes);
         index++;
@@ -196,11 +201,19 @@ public class Generator {
         String[] name = ToolsUtils.jx(map.get("TABLE_NAME").toString());
         Keyon keyon = new Keyon(map.get("TABLE_NAME").toString() +"." + map.get("COLUMN_NAME").toString(),map.get("REFERENCED_TABLE_NAME").toString() + "." +  map.get("REFERENCED_COLUMN_NAME").toString());
         table.addLeft(name[0],keyon,dataBase.getTableMap().get(name[0]));
-        Attributes attributes = new Attributes(name[2]+"Lists","List<"+name[1]+">");
-        Attributes attributes1 = new Attributes(this.dataBase.getTableMap().get(name[0]).getFiledMap().get(ToolsUtils.jx(map.get("COLUMN_NAME").toString())[0]).getAttrName(),
-                this.dataBase.getTableMap().get(name[0]).getFiledMap().get(ToolsUtils.jx(map.get("COLUMN_NAME").toString())[0]).getFiledType());
-        table.getEntity().addAttr(attributes);
-        table.getEntity().addAttr(attributes1);
+        // 子表List实体类数据
+        Attributes attrListEntity = new Attributes(name[2]+"List","List<"+name[1]+">");
+        // 子表ListID数据
+//        Attributes attr1 = new Attributes(this.dataBase.getTableMap().get(name[0]).getFiledMap().get(ToolsUtils.jx(map.get("COLUMN_NAME").toString())[0]).getAttrName(),
+//                this.dataBase.getTableMap().get(name[0]).getFiledMap().get(ToolsUtils.jx(map.get("COLUMN_NAME").toString())[0]).getFiledType());
+        Attributes attrListID = new Attributes(
+                    this.dataBase.getTableMap().get(name[0]).getFiledMap().get(ToolsUtils.jx(map.get("REFERENCED_COLUMN_NAME").toString())[0]).getAttrName()+"s",
+                    "List<"+this.dataBase.getTableMap().get(name[0]).getFiledMap().get(ToolsUtils.jx(map.get("REFERENCED_COLUMN_NAME").toString())[0]).getJavaType()+">"
+                );
+
+        table.getEntity().addAttr(attrListEntity);
+        table.getEntity().addAttr(attrListID);
+
         index++;
         return forForginkeys(index,table);
     }
