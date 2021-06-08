@@ -3,6 +3,8 @@ package live.fanxing.codegenerator;
 import live.fanxing.codegenerator.core.CreateCode;
 import live.fanxing.codegenerator.core.pojo.DataBaseInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,13 +12,21 @@ import org.springframework.stereotype.Component;
  * 这是一个简介
  */
 @Component
+@ConfigurationProperties(prefix = "cr.path")
 public class CreateApplication {
+
     @Autowired
     private CreateCode createCode;
 
+    @Value("${cr.path.packName}")
     private String packName;
+
+    @Value("${cr.path.outPath}")
     private String outPath;
+
+    @Value("${cr.path.modelPath}")
     private String modelPath;
+
     private DataBaseInfo dataBaseInfo;
 
     public CreateApplication create(String... obj) throws Exception {
@@ -37,4 +47,17 @@ public class CreateApplication {
     public DataBaseInfo getDataBaseInfo(){
         return this.dataBaseInfo;
     }
+
+    public String getPackName() {
+        return packName;
+    }
+
+    public String getOutPath() {
+        return outPath;
+    }
+
+    public String getModelPath() {
+        return modelPath;
+    }
+
 }

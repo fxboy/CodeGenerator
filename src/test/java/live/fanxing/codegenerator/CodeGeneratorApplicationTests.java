@@ -27,9 +27,11 @@ class CodeGeneratorApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-
+        String path = System.getProperty("user.dir")+"\\src\\main\\resources\\ftl";
+        System.out.println("=========FTL模板位置========");
+        System.out.println(path);
         System.out.println("=========开始生成文件========");
-        generator.init("com.example.demo","/Users/fanxing/code/","/Users/fanxing/IdeaProjects/CodeGenerator/src/main/resources/ftl").build();
+        generator.init(createApplication.getPackName(),createApplication.getOutPath(),path).build();
        // createApplication.create("com.example.demo","/Users/fanxing/code/","/Users/fanxing/IdeaProjects/CodeGenerator/src/main/resources/ftl").run();
        // System.out.println(JSONObject.toJSONString(createApplication.getDataBaseInfo()));
     }
