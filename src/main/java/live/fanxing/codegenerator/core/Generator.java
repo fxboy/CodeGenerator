@@ -66,9 +66,9 @@ public class Generator {
     //获取的表名集合
     List<String> tableNames;
 
-    String modelPath = "G:\\classTest\\CodeGenerator\\src\\main\\resources\\ftl";
-    String outPath = "B:\\new\\";
-    String packageName = "";
+    String modelPath = Thread.currentThread().getContextClassLoader().getResource("ftl").getPath();
+    String outPath = "c://";
+    String packageName = "com.example.demo";
 
     public Generator(){
 
@@ -182,7 +182,8 @@ public class Generator {
         String[] name = ToolsUtils.jx(map.get("COLUMN_NAME").toString());
         // 创建filed
 
-        Filed filed = new Filed(map.get("COLUMN_KEY").equals("PRI"),map.get("EXTRA").toString().contains("auto_increment"),name[0],name[2],map.get("DATA_TYPE").toString(),ToolsUtils.sqlTypeToJavaType(map.get("DATA_TYPE").toString()));
+        Filed filed = new Filed(map.get("COLUMN_KEY").equals("PRI"),map.get("EXTRA").toString().contains("auto_increment"),name[0],name[2]
+                ,map.get("DATA_TYPE").toString(),ToolsUtils.sqlTypeToJavaType(map.get("DATA_TYPE").toString()));
         table.addFiled(name[0],filed);
         this.dataBase.getTables().get(index).setFileds(table.getFileds());
         this.dataBase.getTables().get(index).setFiledMap(table.getFiledMap());
